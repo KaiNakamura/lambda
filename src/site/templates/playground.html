@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block navbar %}
+{% include "components/navbar.html" %}
+{% endblock %}
+{% block content %}
+<h1>Playground</h1>
+<button id="load-sample" type="button" class="btn btn-sm btn-primary">Load example code</button>
+
+<div class="row">
+	<div class="col-6">
+		<form class="form-inline">
+			<h2>Code input (C++)</h2>
+			<button id="run-button" type="button" class="ml-3 btn btn-sm btn-primary">Run</button>
+		</form>
+		<div class="h-100">
+			<textarea id="code" class="w-100 h-100 p-2" rows="15">Hello world!</textarea>
+		</div>
+	</div>
+	<div class="col-6">
+		<form class="form-inline">
+			<h2>Terminal output</h2>
+			<button id="clear-button" type="button" class="ml-3 mr-3 btn btn-sm btn-primary">Clear</button>
+			<input id="clear-check" class="form-check-input" type="checkbox">
+			<label class="form-check-label" for="clear-check">Clear on run</label>
+		</form>
+		<div class="h-100 p-2 bg-dark text-white">
+			<div id="output-container" style="word-wrap: break-word;">
+				<div class="row">
+					<div class="col text-warning">1</div>
+					<div class="col-11">
+						Welcome to the playground! When you run your code, this is where the output will show up.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$('#load-sample').click(() => {
+		$('#code').val(`
+Geneous::Matrix<2,2> m1 {
+	1, 2, 
+	3, 4
+};
+
+Geneous::Matrix<2,1> m2 {
+	5,
+	6
+};
+
+std::cout << m1 * m2;
+		`.trim());
+	})
+	$(document).delegate('#code', 'keydown', (e) => {
+		var keyCode = e.keyCode || e.which;
+
+		if (keyCode == 9) {
+			e.preventDefault();
+			var start = this.selectionStart;
+			var end = this.selectionEnd;
+
+			$(this).val(`${$(this).val().substring(0, start)}\t${$(this).val().substring(end)}`);
+
+			this.selectionStart = this.selectionEnd = start + 1;
+		}
+	});
+
+	$('#clear-button').click(() => clearOutput());
+	$('#run-button').click(() => run());
+
+	function run() {
+		let code = $('#code').val();
+		$.ajax({
+			type: 'POST',
+			url: '/playground/run',
+			data: JSON.stringify({code: code}),
+			contentType: 'application/json; charset=utf-8',
+			dataType: 'json',
+			success: function(data) {
+				console.log(data);
+			}
+		});
+		
+		if($('#clear-check').is(':checked')) {
+			clearOutput();
+		}
+	}
+
+	function clearOutput() {
+		$('#output-container .row').remove();
+	}
+</script>
+{% endblock %}

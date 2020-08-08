@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block navbar %}
+{% include "components/navbar.html" %}
+{% endblock %}
+{% block content %}
+<h1>Something went wrong...</h1>
+<p>
+	{{ error }}
+</p>
+<a href="javascript:history.back();">Go back</a>
+{% endblock %}
