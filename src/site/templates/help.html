@@ -5,11 +5,28 @@
 {% block content %}
 <h1>Help</h1>
 <h2 id="lin-alg">Linear algebra</h2>
-...
 <h3>Matrices</h3>
-...
+<b>Matrices</b> can be initialized using the following format:<br>
+<code>[[1, 2, 3], [4, 5, 6], [7, 8, 9]]</code> becomes 
+\(\begin{bmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{bmatrix}\)
+
 <h3>Vectors</h4>
-...
-<h2 id="#multivar-calc">Multivariable calculus</h2>
+<b>Vectors</b> can be initialized using the following format:<br>
+<code><1, 2, 3></code> becomes 
+\(\lt1, 2, 3\gt\) 
+, which is equivalent to
+\(\begin{bmatrix}
+1 \\ 
+2 \\ 
+3 
+\end{bmatrix}\)
+<br>
+<code>[[1], [2], [3]]</code> is also an acceptable format for vectors.
+
+<h2 class="mt-4" id="#multivar-calc">Multivariable calculus</h2>
 ...
 {% endblock %}

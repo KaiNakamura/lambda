@@ -13,7 +13,7 @@
 			<button id="run-button" type="button" class="ml-3 btn btn-sm btn-primary">Run</button>
 		</form>
 		<div class="h-100">
-			<textarea id="code" class="w-100 h-100 p-2" rows="15">Hello world!</textarea>
+			<textarea id="code" class="w-100 h-100 p-2" rows="15">std::cout &lt;&lt; "Hello world!\n";</textarea>
 		</div>
 	</div>
 	<div class="col-6">
@@ -24,18 +24,15 @@
 			<label class="form-check-label" for="clear-check">Clear on run</label>
 		</form>
 		<div class="h-100 p-2 bg-dark text-white">
-			<div id="output-container" style="word-wrap: break-word;">
-				<div class="row">
-					<div class="col text-warning">1</div>
-					<div class="col-11">
-						Welcome to the playground! When you run your code, this is where the output will show up.
-					</div>
-				</div>
-			</div>
+			<pre id="output-container" class="text-white" style="white-space: pre-wrap;"></pre>
 		</div>
 	</div>
 </div>
 <script>
+	$(document).ready(() => {
+		addOutputLine('Welcome to the playground! Here, you can test Geneous functionality in C++, and when you run your code, the output will appear here.');
+	});
+
 	$('#load-sample').click(() => {
 		$('#code').val(`
 Geneous::Matrix<2,2> m1 {
@@ -77,7 +74,14 @@ std::cout << m1 * m2;
 			contentType: 'application/json; charset=utf-8',
 			dataType: 'json',
 			success: function(data) {
-				console.log(data);
+				let build_lines = data['build_output'].split('\n').filter((e) => e.trim().length != 0);
+				build_lines.forEach((line) => {
+					addOutputLine(line);
+				});
+				let run_lines = data['run_output'].split('\n').filter((e) => e.trim().length != 0);
+				run_lines.forEach((line) => {
+					addOutputLine(line);
+				});
 			}
 		});
 		
@@ -86,8 +90,13 @@ std::cout << m1 * m2;
 		}
 	}
 
+	function addOutputLine(text) {
+		let line = $('#output-container').html().split('\n').length
+		$('#output-container').append(`<span style="color: yellow;">${line}</span> ${text}\n`);
+	}
+
 	function clearOutput() {
-		$('#output-container .row').remove();
+		$('#output-container').empty();
 	}
 </script>
 {% endblock %}

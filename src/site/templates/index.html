@@ -24,7 +24,7 @@
 				<b>Declarations</b> [<a href="javascript:addDeclaration();">Add</a>]
 			</p>
 			<div class="card d-none">
-				<table class="table table-sm table-bordered mb-0">
+				<table class="table table-sm table-bordered mb-0" style="border-style: hidden;">
 					<thead>
 						<tr>
 							<th scope="col"></th>
@@ -32,40 +32,42 @@
 							<th scope="col" style="width: 100%;">Input</th>
 						</tr>
 					</thead>
-					<tbody>
-
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
 
-		<h2 class="mt-4">Functions</h2>
-		<div class="row">
-			<div class="col">
-				<div class="card h-100">
-					<div id="lin-alg" class="card-body">
-						<a class="card-title h5" href="/help#lin-alg">Linear algebra</a>
-						<p id="commands">...</p>
+		<div id="extras">
+			<h2 class="mt-4">Functions</h2>
+			<div class="row">
+				<div class="col">
+					<div class="card h-100">
+						<div id="lin-alg" class="card-body">
+							<a class="card-title h5" href="/help#lin-alg">Linear algebra</a>
+							<p id="commands">...</p>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card h-100">
+						<div id="multivar-calc" class="card-body">
+							<a class="card-title h5" href="/help#multivar-calc">Multivariable calculus</a>
+							<p id="commands">...</p>
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col">
-				<div class="card h-100">
-					<div id="multivar-calc" class="card-body">
-						<a class="card-title h5" href="/help#multivar-calc">Multivariable calculus</a>
-						<p id="commands">...</p>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<p class="text-right mt-4"><a href="/help">See more &#8594;</a></p>
+			<p class="text-right mt-4"><a href="/help">See more &#8594;</a></p>
+		</div>
+		
+		{% block query_content %} {% endblock %}
 	</div>
 </div>
 
 <script>
 	$(document).ready(() => {
-		["eigenvectors", "null space", "inverse", "row reduce"].forEach((command) => {
+		["eigenvectors", "null space", "inverse", "row reduce", "matrices", "vectors"].forEach((command) => {
 			$('#lin-alg #commands').prepend(`
 <a href="/help#lin-alg">${command}</a>, 
 			`);
@@ -81,21 +83,30 @@
 		if ($('#input').val().trim().length > 0) {
 			let params = `?i=${$('#input').val()}`;
 			$('.declaration-row').each((i, e) => {
+				let name = $(e).find('.declaration-name').html().trim();
+				let input = $(e).find('.declaration-input').html().trim();
 
+				if(name.length == 0 || input == 0) {
+					console.log('invalid declaration');
+					return;
+				}
+
+				params += `&${name}=${input}`;
 			});
-			//window.location = `/query${params}`;
+			console.log(params)
+			window.location = `/query${params}`;
 		}
 	}
 
-	function addDeclaration() {
+	function addDeclaration(name, input) {
 		$('#declarations .card').removeClass('d-none');
 		$('#declarations table tbody').append(`
 <tr class="declaration-row">
 	<td>
 		<button type="button" class="close float-left" onclick="removeDeclaration(this);">&times;</button>
 	</td>
-	<td class="declaration-input" contenteditable="true"></td>
-	<td class="declaration-input" contenteditable="true"></td>
+	<td class="declaration-name" contenteditable="true">${name || ''}</td>
+	<td class="declaration-input" contenteditable="true">${input || ''}</td>
 </tr>
 		`);
 		$('#declarations table tbody tr:last-child .declaration-input').each((i, e) => {
@@ -109,9 +120,9 @@
 
 		let rerender = (event) => {
 			if(event.keyCode == 13) {
-				$(element).html('\\(' + $(element).html() + '\\)');
+				//$(element).html('\\(' + $(element).html() + '\\)');
 				event.preventDefault();
-				renderMathInElement(element);
+				//renderMathInElement(element);
 			}
 		}
 	}
@@ -123,4 +134,5 @@
 		}
 	}
 </script>
+{% block query_script %} {% endblock %}
 {% endblock %}
