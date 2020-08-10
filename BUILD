@@ -1,8 +1,8 @@
 cc_library(
-	name = "liblambda",
+	name = "lambda",
 	srcs = glob(["src/**/*.cc"]),
 	hdrs = glob(["include/lambda/**/*.hh"]),
-	copts = ["-Iinclude/lambda", "-isystem external/geneous/include"],
+	copts = ["-Iinclude/lambda"],
 	deps = [
 		"@geneous//:main"
 	]
