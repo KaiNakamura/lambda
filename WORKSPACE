@@ -2,7 +2,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 local_repository(
 	name = "geneous",
-	path = "/Users/ntresham/workspace/vnext/geneous"
+	path = "../geneous"
 )
 
 http_archive(
