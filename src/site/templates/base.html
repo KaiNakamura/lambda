@@ -21,24 +21,7 @@
 	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
 		integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
 		onload="renderMathInElement(document.body);"></script>
-
-	<script>
-		var debounce = function (func, wait, immediate) {
-			var timeout;
-			return function () {
-				var context = this, args = arguments;
-				var later = function () {
-					timeout = null;
-					if (!immediate) func.apply(context, args);
-				};
-				var callNow = immediate && !timeout;
-				clearTimeout(timeout);
-				timeout = setTimeout(later, wait);
-				if (callNow) func.apply(context, args);
-			};
-		};
-	</script>
-
+	
 	<title>Lambda</title>
 </head>
 

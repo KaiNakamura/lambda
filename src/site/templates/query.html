@@ -1,14 +1,16 @@
 {% extends "index.html" %}
 {% block query_content %}
 
-<div class="card mt-4">
+<div class="card my-4">
 	<div class="card-body">
 		<h2>Raw query</h2>
 		<code>{{ query }}</code>
+		{% if declarations|length > 0 %}
 		<h4 class="mt-2">Declarations</h4>
 		{% for declaration in declarations %}
 		<code>{{ declaration['name'] }}</code> = <code>{{ declaration['input'] }}</code><br>
 		{% endfor %}
+		{% endif %}
 		<h2 class="mt-4">Processed query</h2>
 		{{ processed_query }}
 		<h2 class="mt-4">Result</h2>
@@ -21,8 +23,5 @@
 <script>
 	$('#extras').hide();
 	$('#input').val('{{ query }}');
-	{% for declaration in declarations %}
-	addDeclaration('{{ declaration["name"] }}', '{{ declaration["input"] }}');
-	{% endfor %}
 </script>
 {% endblock %}
